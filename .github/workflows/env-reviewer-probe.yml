@@ -1,0 +1,34 @@
+name: Environment reviewer probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      probe_id:
+        description: 'Уникальный ID запуска'
+        required: true
+        default: 'p1'
+
+permissions: {}
+
+jobs:
+  protected-job:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Read secret
+        env:
+          FLAG: ${{ secrets.FLAG }}
+        run: |
+          echo "probe_id=${{ inputs.probe_id }}"
+          if [ -z "$FLAG" ]; then
+            echo "RESULT: no secret"
+          else
+            echo "RESULT: secret length=${#FLAG}"
+          fi
+
+      - name: Show run metadata
+        run: |
+          echo "run_id=${{ github.run_id }}"
+          echo "run_attempt=${{ github.run_attempt }}"
+          echo "actor=${{ github.actor }}"
+          echo "triggering_actor=${{ github.triggering_actor }}"
