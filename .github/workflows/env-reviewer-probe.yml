@@ -19,6 +19,7 @@ jobs:
         env:
           FLAG: ${{ secrets.FLAG }}
         run: |
+          echo "HASH=v2"
           echo "probe_id=${{ inputs.probe_id }}"
           if [ -z "$FLAG" ]; then
             echo "RESULT: no secret"
